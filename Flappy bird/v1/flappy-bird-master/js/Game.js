@@ -447,7 +447,7 @@
         //Create bird //
         ////////////////
         var createBird = function createBird() {
-            Bird = Game.add.sprite(0, 0, 'bird');
+            Bird = Game.add.sprite(0, 0, 'parodi');
             Bird.anchor.setTo(0.5, 0.5);
             Bird.animations.add('flying', [0, 1, 2, 3, 2, 1, 0], 20, true);
             Bird.animations.play('flying');
