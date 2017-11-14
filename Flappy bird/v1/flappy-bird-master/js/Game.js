@@ -3,7 +3,7 @@
         ///////////////////
         //GAME CONSTANTS //
         ///////////////////
-        var DEBUG_MODE = true,
+        var DEBUG_MODE = false,
 
             GAME_SPEED = 180,
             GRAVITY = 1800,
@@ -23,8 +23,8 @@
             TITLE_TEXT = "FLAPPY UP",
             INSTRUCTIONS_TEXT = "TOCA\nPARA\nVOLAR",
 
-            HIGHSCORE_TITLE = "HIGHSCORES",
-            HIGHSCORE_SUBMIT = "POST SCORE",
+            HIGHSCORE_TITLE = "Los mas papus",
+            HIGHSCORE_SUBMIT = "Agrega tu puntaje",
 
             DEVELOPER_COPYRIGHT_TEXT = "",
             GRAPHIC_COPYRIGHT_TEXT = "",
@@ -340,6 +340,7 @@
         //Get modified GAME_SPEED basic on gameScore //
         //////////////////////////////////////////
         var getModifiedSpeed = function getModifiedSpeed() {
+
             return GAME_SPEED + gameScore * 5;
         };
 
@@ -363,7 +364,9 @@
         //Load assets in game //
         ////////////////////////
         var loadAssets = function loadAssets() {
+          /////Game.load.spritesheet('bird', 'img/bird.png', 48, 35);
             Game.load.spritesheet('bird', 'img/bird.png', 48, 35);
+            Game.load.spritesheet('parodi', 'img/parodi.png', 48, 35);
             Game.load.spritesheet('clouds', 'img/clouds.png', 64, 34);
 
             Game.load.image('town', 'img/town.png');
@@ -374,6 +377,13 @@
             Game.load.audio('flap', 'wav/flap.wav');
             Game.load.audio('hurt', 'wav/hurt.wav');
             Game.load.audio('score', 'wav/score.wav');
+        };
+
+        ////////////////////////
+        //Sprite Changes//
+        ////////////////////////
+        var changespriteUP = function changespriteUP() {
+            Bird.loadTexture('parodi',0)
         };
 
         //////////////////////
