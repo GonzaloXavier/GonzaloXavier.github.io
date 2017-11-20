@@ -54,7 +54,7 @@
             PostScoreClickArea,
             isScorePosted = false,
             isSoundEnabled = true,
-            Leaderboard;
+            Leaderboard, SwapIcon, isSwapdisplayed = true, sprite_state=1;
 
         //////////////////////////////////
         //VARIABLES FOR GAME-MANAGEMENT //
@@ -106,7 +106,10 @@
         MainMenuState.create = function() {
             function click() {
                 if (Phaser.Rectangle.contains(SoundEnabledIcon.bounds, Game.input.x, Game.input.y)) {
-                    toogleSound();
+                    // toogleSound();
+                    changespriteUP();
+                    killBird();
+                    createBird();
                 } else {
                     birdFlap();
                     Game.input.onDown.remove(click);
@@ -123,6 +126,7 @@
             createBird();
             createTexts();
             createSounds();
+            createSwaps();
 
             gameScore = 0;
 
@@ -169,6 +173,7 @@
             ScoreText.setText(gameScore);
             SoundEnabledIcon.renderable = false;
             SoundDisabledIcon.renderable = false;
+            SwapIcon.renderable = false
 
             Bird.body.allowGravity = true;
             Bird.body.gravity.y = GRAVITY;
@@ -203,6 +208,8 @@
                 Game.debug.renderSpriteBody(Bird);
                 Game.debug.renderSpriteBounds(Bird);
                 Game.debug.renderSpriteCorners(Bird, true, true);
+
+                Game.debug.renderSpriteBounds(SwapIcon);
 
                 Game.debug.renderQuadTree(Game.physics.quadTree);
 
@@ -256,6 +263,7 @@
 
             SoundEnabledIcon.renderable = false;
             SoundDisabledIcon.renderable = false;
+
 
             Bird.angle = 180;
             Bird.animations.stop();
@@ -349,11 +357,11 @@
         /////////////////////////
         var toogleSound = function toogleSound() {
             if (isSoundEnabled) {
-                SoundDisabledIcon.renderable = true;
+                SoundDisabledIcon.renderable = false;
                 SoundEnabledIcon.renderable = false;
                 isSoundEnabled = false;
             } else {
-                SoundEnabledIcon.renderable = true;
+                SoundEnabledIcon.renderable = false;
                 SoundDisabledIcon.renderable = false;
                 isSoundEnabled = true;
                 FlapSound.play();
@@ -365,14 +373,15 @@
         ////////////////////////
         var loadAssets = function loadAssets() {
           /////Game.load.spritesheet('bird', 'img/bird.png', 48, 35);
-            Game.load.spritesheet('bird', 'img/bird.png', 48, 35);
-            Game.load.spritesheet('parodi', 'img/parodi.png', 48, 35);
+            Game.load.spritesheet('pic1', 'img/bird.png', 48, 35);
+            Game.load.spritesheet('pic2', 'img/parodi.png', 48, 35);
             Game.load.spritesheet('clouds', 'img/clouds.png', 64, 34);
 
             Game.load.image('town', 'img/town.png');
             Game.load.image('pipe', 'img/pipe.png');
             Game.load.image('soundOn', 'img/soundOn.png');
             Game.load.image('soundOff', 'img/soundOff.png');
+            Game.load.image('swap', 'img/swapico.png');
 
             Game.load.audio('flap', 'wav/flap.wav');
             Game.load.audio('hurt', 'wav/hurt.wav');
@@ -383,7 +392,11 @@
         //Sprite Changes//
         ////////////////////////
         var changespriteUP = function changespriteUP() {
-            Bird.loadTexture('parodi',0)
+            console.log("changing sprite")
+            sprite_state++
+            if (sprite_state > 2) {
+              sprite_state = 1
+            }
         };
 
         //////////////////////
@@ -447,7 +460,7 @@
         //Create bird //
         ////////////////
         var createBird = function createBird() {
-            Bird = Game.add.sprite(0, 0, 'parodi');
+            Bird = Game.add.sprite(0, 0, 'pic'+sprite_state);
             Bird.anchor.setTo(0.5, 0.5);
             Bird.animations.add('flying', [0, 1, 2, 3, 2, 1, 0], 20, true);
             Bird.animations.play('flying');
@@ -455,7 +468,12 @@
             Bird.body.gravity.y = 0;
             Bird.body.allowGravity = false;
         };
-
+        ////////////////
+        // Kill bird //
+        ////////////////
+        var killBird = function killBird() {
+          Bird.destroy();
+        }
         //////////////////
         //Create Pipes //
         //////////////////
@@ -587,14 +605,22 @@
         //////////////////
         var createSounds = function createSounds() {
             SoundEnabledIcon = Game.add.sprite(10, 10, 'soundOn');
-            SoundEnabledIcon.renderable = isSoundEnabled ? true : false;
+            SoundEnabledIcon.renderable = isSoundEnabled ? false : false;
 
             SoundDisabledIcon = Game.add.sprite(10, 10, 'soundOff');
-            SoundDisabledIcon.renderable = isSoundEnabled ? false : true;
+            SoundDisabledIcon.renderable = isSoundEnabled ? false : false;
 
             FlapSound = Game.add.audio('flap');
             ScoreSound = Game.add.audio('score');
             HurtSound = Game.add.audio('hurt');
+        };
+
+        //////////////////
+        //Create Swaps //
+        //////////////////
+        var createSwaps = function createSwaps() {
+            SwapIcon = Game.add.sprite(10, 10, 'swap');
+            SwapIcon.renderable = isSwapdisplayed ? true : false;
         };
 
         //////////////
